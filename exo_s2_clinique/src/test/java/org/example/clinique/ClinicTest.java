@@ -1,5 +1,6 @@
 package org.example.clinique;
 
+import org.example.triage.type.TriageType;
 import org.example.visiblesymptom.type.VisibleSymptom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,32 +14,45 @@ class ClinicTest {
 
     @BeforeEach
     void setUp() {
-        clinic = new Clinic();
+        TriageType medecinTriageType = TriageType.FIFO;
+        TriageType radiologieTriageType = TriageType.FIFO;
+        clinic = new Clinic(medecinTriageType, radiologieTriageType);
     }
 
     @Test
-    public void etantDonneUneCliniqueVide_quandObtenirProchainPatientMedecin_alorsRetourneNull(){
+    public void quandInstanciation_devraitRetournerTriageType() {
 
-        assertNull(clinic.obtenirProchainPatientPourMedecin());
+        assertEquals(TriageType.FIFO, clinic.obtenirMedecinTriageType());
+        assertEquals(TriageType.FIFO, clinic.obtenirRadiologieTriageType());
     }
 
     @Test
-    public void etantDonneUneCliniqueVide_quandObtenirProchainPatientRadiologie_alorsRetourneNull(){
+    public void quandInstanciation_devraitEtreVide() {
 
-        assertNull(clinic.obtenirProchainPatientPourRadiologie());
+        assertTrue(clinic.listeMedecinEstVide());
+        assertTrue(clinic.listeRadiologieEstVide());
     }
 
     @Test
-    public void etantDonneCliniqueVide_quandPatientArrive_alorsFileMedecinPlusVide(){
+    public void cliniqueVide_quandObtenirProchainPatient_devraitRetournerException() {
+
+        IndexOutOfBoundsException exceptionMedecin = assertThrows(IndexOutOfBoundsException.class, () -> clinic.obtenirProchainPatientPourMedecin());
+        IndexOutOfBoundsException exceptionRadiologie = assertThrows(IndexOutOfBoundsException.class, () -> clinic.obtenirProchainPatientPourRadiologie());
+
+        assertEquals("Aucun patient n'est attendu en consultation.", exceptionMedecin.getMessage());
+        assertEquals("Aucun patient n'est attendu en radiologie.", exceptionRadiologie.getMessage());
+    }
+
+    @Test
+    public void cliniqueVide_quandPatientArrive_devraitRemplirFileMedecin() {
 
         clinic.triagePatient("Bob", 1, VisibleSymptom.MIGRAINE);
 
         assertFalse(clinic.listeMedecinEstVide());
     }
 
-    
     @Test
-    public void etantDonneCliniqueVide_quandPatientArriveAvecBrokenBone_devraitAjouterPatientAFileRadiologie(){
+    public void cliniqueVide_quandPatientArriveAvecSymptomesRadiologie_devraitEtreAjouteAFileRadiologie() {
 
         clinic.triagePatient("Bob", 5, VisibleSymptom.BROKEN_BONE);
 
@@ -46,34 +60,34 @@ class ClinicTest {
     }
 
     @Test
-    public void etantDonneCliniqueVide_quandPatientArriveAvecSprain_devraitAjouterPatientAFileRadiologie(){
-
-        clinic.triagePatient("Bob", 5, VisibleSymptom.SPRAIN);
-
-        assertFalse(clinic.listeRadiologieEstVide());
-    }
-
-    @Test
-    public void etantDonneCliniqueVide_quandPatientArrive_ilEstLePremierDansLaFileMedecin(){
+    public void cliniqueVide_quandPatientArrive_devraitEtrePremierServi() {
 
         clinic.triagePatient("Bob", 1, VisibleSymptom.BROKEN_BONE);
 
-        String patientName = clinic.obtenirProchainPatientPourMedecin();
+        String patientNameMedecin = clinic.obtenirProchainPatientPourMedecin();
+        String patientNameRadiologie = clinic.obtenirProchainPatientPourRadiologie();
 
-        assertEquals("Bob", patientName);
+        assertEquals("Bob", patientNameMedecin);
+        assertEquals("Bob", patientNameRadiologie);
     }
 
     @Test
-    public void etantDonneClinique_quandDeuxPatientsArriventAvecMemesConditions_alorsPatientsRetournerSelonOrdreArrivee(){
+    public void clinique_quandPlusieursPatientsArrivent_devraientEtreServisDansLOrdre(){
 
-        clinic.triagePatient("Jean", 1, VisibleSymptom.COLD);
-        clinic.triagePatient("Julie", 1, VisibleSymptom.COLD);
+        clinic.triagePatient("Jean", 1, VisibleSymptom.BROKEN_BONE);
+        clinic.triagePatient("Julie", 1, VisibleSymptom.BROKEN_BONE);
 
-        String premierPatient = clinic.obtenirProchainPatientPourMedecin();
-        String deuxiemePatient = clinic.obtenirProchainPatientPourMedecin();
+        String premierPatientMedecin = clinic.obtenirProchainPatientPourMedecin();
+        String deuxiemePatientMedecin = clinic.obtenirProchainPatientPourMedecin();
 
-        assertEquals("Jean", premierPatient);
-        assertEquals("Julie", deuxiemePatient);
+        String premierPatientRadiologie = clinic.obtenirProchainPatientPourRadiologie();
+        String deuxiemePatientRadiologie = clinic.obtenirProchainPatientPourRadiologie();
+
+        assertEquals("Jean", premierPatientMedecin);
+        assertEquals("Julie", deuxiemePatientMedecin);
+
+        assertEquals("Jean", premierPatientRadiologie);
+        assertEquals("Julie", deuxiemePatientRadiologie);
     }
 
 }

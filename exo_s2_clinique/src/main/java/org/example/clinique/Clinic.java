@@ -1,5 +1,6 @@
 package org.example.clinique;
 
+import org.example.triage.type.TriageType;
 import org.example.visiblesymptom.type.VisibleSymptom;
 
 import java.util.ArrayList;
@@ -7,10 +8,15 @@ import java.util.LinkedList;
 
 public class Clinic {
 
-    private ArrayList<String> listeMedecin;
-    private ArrayList<String> listeRadiologie;
+    private final TriageType medecinTriageType;
+    private final TriageType radiologieTriageType;
+    private final ArrayList<String> listeMedecin;
+    private final ArrayList<String> listeRadiologie;
 
-    public Clinic(/* ... */) {
+
+    public Clinic(TriageType medecinTriageType, TriageType radiologieTriageType) {
+        this.medecinTriageType = medecinTriageType;
+        this.radiologieTriageType = radiologieTriageType;
         listeMedecin = new ArrayList<>();
         listeRadiologie = new ArrayList<>();
     }
@@ -18,7 +24,7 @@ public class Clinic {
     public void triagePatient(String name, int gravity, VisibleSymptom visibleSymptom) {
         listeMedecin.add(name);
 
-        if(visibleSymptom == VisibleSymptom.BROKEN_BONE || visibleSymptom == VisibleSymptom.SPRAIN) {
+        if (visibleSymptom == VisibleSymptom.BROKEN_BONE || visibleSymptom == VisibleSymptom.SPRAIN) {
             listeRadiologie.add(name);
         }
     }
@@ -32,11 +38,25 @@ public class Clinic {
     }
 
     public String obtenirProchainPatientPourMedecin() {
-        return listeMedecin.get(0);
+        if (listeMedecin.isEmpty())
+            throw new IndexOutOfBoundsException("Aucun patient n'est attendu en consultation.");
+
+        return listeMedecin.remove(0);
     }
 
     public String obtenirProchainPatientPourRadiologie() {
-        return listeRadiologie.get(0);
+        if (listeRadiologie.isEmpty())
+            throw new IndexOutOfBoundsException("Aucun patient n'est attendu en radiologie.");
+
+        return listeRadiologie.remove(0);
+    }
+
+    public TriageType obtenirMedecinTriageType() {
+        return medecinTriageType;
+    }
+
+    public TriageType obtenirRadiologieTriageType() {
+        return radiologieTriageType;
     }
 
     // D'autres méthodes peuvent être nécessaires
