@@ -4,7 +4,6 @@ import org.example.triage.type.TriageType;
 import org.example.visiblesymptom.type.VisibleSymptom;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Clinic {
 
