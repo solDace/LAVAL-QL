@@ -32,10 +32,14 @@ public class Clinic {
     }
 
     public String obtenirProchainPatientPourMedecin() {
-        return listeMedecin.get(0);
+        String patient  = listeMedecin.get(0);
+        listeMedecin.remove(0);
+        return patient;
     }
 
     public String obtenirProchainPatientPourRadiologie() {
+        String patient  = listeMedecin.get(0);
+        listeMedecin.remove(0);
         return listeRadiologie.get(0);
     }
 
