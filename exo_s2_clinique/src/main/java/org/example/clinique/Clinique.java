@@ -12,7 +12,6 @@ public class Clinique {
     private final ArrayList<String> listeMedecin;
     private final ArrayList<String> listeRadiologie;
 
-
     public Clinique(TriageType medecinTriageType, TriageType radiologieTriageType) {
         this.medecinTriageType = medecinTriageType;
         this.radiologieTriageType = radiologieTriageType;
@@ -21,7 +20,18 @@ public class Clinique {
     }
 
     public void triagePatient(String name, int gravity, VisibleSymptom visibleSymptom) {
-        listeMedecin.add(name);
+
+        switch (medecinTriageType) {
+            case FIFO:
+                listeMedecin.add(name);
+                break;
+            case GRAVITY:
+                if (gravity > 5)
+                    listeMedecin.add(0, name);
+                else
+                    listeMedecin.add(name);
+                break;
+        }
 
         if (visibleSymptom == VisibleSymptom.BROKEN_BONE || visibleSymptom == VisibleSymptom.SPRAIN) {
             listeRadiologie.add(name);
@@ -36,7 +46,7 @@ public class Clinique {
         return listeRadiologie.isEmpty();
     }
 
-    public String obtenirProchainPatientPourMedecin() {
+    public String obtenirProchainPatientFileMedecin() {
         if (listeMedecin.isEmpty())
             throw new CliniqueVideException("Aucun patient n'est attendu en consultation.");
 
