@@ -4,12 +4,13 @@ package org.example.clinique;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.example.triage.type.TriageType;
 import org.example.visiblesymptom.type.VisibleSymptom;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class CliniqueTest {
+public class CliniqueTest {
 
     private Clinique clinique;
 
@@ -71,7 +72,7 @@ class CliniqueTest {
 
         clinique.triagePatient("Bob", 1, VisibleSymptom.MIGRAINE);
 
-        assertThat("Bb").isEqualTo(clinique.obtenirProchainPatientFileMedecin());
+        assertThat("Bob").isEqualTo(clinique.obtenirProchainPatientFileMedecin());
         assertTrue(clinique.listeRadiologieEstVide());
     }
 
