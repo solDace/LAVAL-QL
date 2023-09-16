@@ -5,7 +5,7 @@ import org.example.visiblesymptom.type.VisibleSymptom;
 
 import java.util.ArrayList;
 
-public class Clinic {
+public class Clinique {
 
     private final TriageType medecinTriageType;
     private final TriageType radiologieTriageType;
@@ -13,7 +13,7 @@ public class Clinic {
     private final ArrayList<String> listeRadiologie;
 
 
-    public Clinic(TriageType medecinTriageType, TriageType radiologieTriageType) {
+    public Clinique(TriageType medecinTriageType, TriageType radiologieTriageType) {
         this.medecinTriageType = medecinTriageType;
         this.radiologieTriageType = radiologieTriageType;
         listeMedecin = new ArrayList<>();
@@ -38,14 +38,14 @@ public class Clinic {
 
     public String obtenirProchainPatientPourMedecin() {
         if (listeMedecin.isEmpty())
-            throw new IndexOutOfBoundsException("Aucun patient n'est attendu en consultation.");
+            throw new CliniqueVideException("Aucun patient n'est attendu en consultation.");
 
         return listeMedecin.remove(0);
     }
 
     public String obtenirProchainPatientPourRadiologie() {
         if (listeRadiologie.isEmpty())
-            throw new IndexOutOfBoundsException("Aucun patient n'est attendu en radiologie.");
+            throw new CliniqueVideException("Aucun patient n'est attendu en radiologie.");
 
         return listeRadiologie.remove(0);
     }
@@ -56,6 +56,14 @@ public class Clinic {
 
     public TriageType obtenirRadiologieTriageType() {
         return radiologieTriageType;
+    }
+
+    public String obtenirDernierPatientFileRadiologie() {
+        return listeRadiologie.get(listeRadiologie.size() - 1);
+    }
+
+    public String obtenirDernierPatientFileMedecin() {
+        return listeMedecin.get(listeMedecin.size() - 1);
     }
 
     // D'autres méthodes peuvent être nécessaires
