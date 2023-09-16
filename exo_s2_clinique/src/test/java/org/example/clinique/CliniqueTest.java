@@ -72,7 +72,7 @@ public class CliniqueTest {
 
         clinique.triagePatient("Bob", 1, VisibleSymptom.MIGRAINE);
 
-        assertThat("Bob").isEqualTo(clinique.obtenirProchainPatientFileMedecin());
+        assertThat("Bb").isEqualTo(clinique.obtenirProchainPatientFileMedecin());
         assertTrue(clinique.listeRadiologieEstVide());
     }
 
