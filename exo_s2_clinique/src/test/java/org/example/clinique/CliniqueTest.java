@@ -4,11 +4,13 @@ package org.example.clinique;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.example.triage.type.TriageType;
 import org.example.visiblesymptom.type.VisibleSymptom;
-import org.junit.Test;
 
 
-import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
+
 
 public class CliniqueTest {
 
