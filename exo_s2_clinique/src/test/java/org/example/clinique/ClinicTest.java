@@ -97,14 +97,28 @@ class ClinicTest {
     }
 
     @Test
-    public void etantDonneCliniqueTriantParGraviteAyantDejaDesPatients_quandArrivePatientsAvecGraviteDAuMoinsCinq_alorsPatientsRetournesSelonOrdreArrivee() {
-        
-        etantDonneCliniqueTriantParGraviteAyantDejaDesPatients();
-        clinic.triagePatient(PATIENT_ALICE, 5, VisibleSymptom.COLD);
-        clinic.triagePatient(PATIENT_BOB, 5, VisibleSymptom.COLD);
+    public void etantDonneCliniqueTriantParGraviteAyantDejaDesPatients_quandArrivePatientsAvecFractureGraviteDAuMoinsCinq_alorsPatientsRetournesSelonOrdreArrivee() {
 
-        Patient premierPatient = clinic.obtenirProchainPatientPourMedecin();
-        Patient deuxiemePatient = clinic.obtenirProchainPatientPourMedecin();
+        etantDonneCliniqueTriantParGraviteAyantDejaDesPatients();
+        clinic.triagePatient(PATIENT_ALICE, 5, VisibleSymptom.BROKEN_BONE);
+        clinic.triagePatient(PATIENT_BOB, 5, VisibleSymptom.BROKEN_BONE);
+
+        Patient premierPatient = clinic.obtenirProchainPatientPourRadiologie();
+        Patient deuxiemePatient = clinic.obtenirProchainPatientPourRadiologie();
+
+        assertEquals(PATIENT_ALICE, premierPatient.getName());
+        assertEquals(PATIENT_BOB, deuxiemePatient.getName());
+    }
+
+    @Test
+    public void etantDonneCliniqueTriantParGravite_quandArrivePatientAvecEntorseDAuMoinsCinq_alorsPatientPlacerEnTeteDeFile() {
+
+        clinic.setTriage(TriageType.GRAVITY);
+        clinic.triagePatient(PATIENT_ALICE, 5, VisibleSymptom.SPRAIN);
+        clinic.triagePatient(PATIENT_BOB, 5, VisibleSymptom.SPRAIN);
+
+        Patient premierPatient = clinic.obtenirProchainPatientPourRadiologie();
+        Patient deuxiemePatient = clinic.obtenirProchainPatientPourRadiologie();
 
         assertEquals(PATIENT_ALICE, premierPatient.getName());
         assertEquals(PATIENT_BOB, deuxiemePatient.getName());
