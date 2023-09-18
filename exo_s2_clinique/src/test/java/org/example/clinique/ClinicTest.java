@@ -9,11 +9,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ClinicTest {
 
-    private Clinic clinic;
-
     @BeforeEach
     void setUp() {
         clinic = new Clinic();
+    }
+
+    @Test
+    public void quandCliniqueCree_alorsToutesLesListesSontVides() {
+
+        assertTrue(clinic.listeMedecinEstVide());
+        assertTrue(clinic.listeRadiologieEstVide());
     }
 
     @Test
@@ -29,26 +34,26 @@ class ClinicTest {
     }
 
     @Test
-    public void etantDonneCliniqueVide_quandPatientArrive_alorsFileMedecinPlusVide() {
+    public void etantDonneCliniqueVide_quandPatientArrive_alorsFileMedecinNestPlusVide() {
 
-        clinic.triagePatient("Bob", 1, VisibleSymptom.MIGRAINE);
+        clinic.triagePatient(PATIENT_ALICE, 1, VisibleSymptom.MIGRAINE);
 
         assertFalse(clinic.listeMedecinEstVide());
     }
 
 
     @Test
-    public void etantDonneCliniqueVide_quandPatientArriveAvecBrokenBone_devraitAjouterPatientAFileRadiologie() {
+    public void quandPatientArriveAvecOsBrise_alorsFileRadiologieNestPlusVide() {
 
-        clinic.triagePatient("Bob", 5, VisibleSymptom.BROKEN_BONE);
+        clinic.triagePatient(PATIENT_ALICE, 5, VisibleSymptom.BROKEN_BONE);
 
         assertFalse(clinic.listeRadiologieEstVide());
     }
 
     @Test
-    public void etantDonneCliniqueVide_quandPatientArriveAvecSprain_devraitAjouterPatientAFileRadiologie() {
+    public void quandPatientArriveAvecEntorse_alorsFileRadiologieNestPlusVide() {
 
-        clinic.triagePatient("Bob", 5, VisibleSymptom.SPRAIN);
+        clinic.triagePatient(PATIENT_ALICE, 5, VisibleSymptom.SPRAIN);
 
         assertFalse(clinic.listeRadiologieEstVide());
     }
@@ -56,28 +61,28 @@ class ClinicTest {
     @Test
     public void etantDonneCliniqueVide_quandPatientArrive_ilEstLePremierDansLaFileMedecin() {
 
-        clinic.triagePatient("Bob", 1, VisibleSymptom.BROKEN_BONE);
+        clinic.triagePatient(PATIENT_ALICE, 1, VisibleSymptom.BROKEN_BONE);
 
         String patientName = clinic.obtenirProchainPatientPourMedecin();
 
-        assertEquals("Bob", patientName);
+        assertEquals(PATIENT_ALICE, patientName);
     }
 
     @Test
     public void quandArrivePatientsAvecMemesConditions_alorsPatientsRetournerSelonOrdreArrivee() {
 
-        quandArrivePatientsAvecMemesConditions();
+        clinic.triagePatient(PATIENT_ALICE, 1, VisibleSymptom.COLD);
+        clinic.triagePatient(PATIENT_BOB, 1, VisibleSymptom.COLD);
 
         String premierPatient = clinic.obtenirProchainPatientPourMedecin();
         String deuxiemePatient = clinic.obtenirProchainPatientPourMedecin();
 
-        assertEquals("Jean", premierPatient);
-        assertEquals("Julie", deuxiemePatient);
+        assertEquals(PATIENT_ALICE, premierPatient);
+        assertEquals(PATIENT_BOB, deuxiemePatient);
     }
 
-    private void quandArrivePatientsAvecMemesConditions() {
-        clinic.triagePatient("Jean", 1, VisibleSymptom.COLD);
-        clinic.triagePatient("Julie", 1, VisibleSymptom.COLD);
-    }
+    private Clinic clinic;
+    private static final String PATIENT_ALICE = "Alice";
+    private static final String PATIENT_BOB = "Bob";
 
 }
