@@ -1,5 +1,6 @@
 package org.example.clinique;
 
+import org.example.triage.type.TriageType;
 import org.example.visiblesymptom.type.VisibleSymptom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ClinicTest {
 
     @BeforeEach
-    void setUp() {
-        clinic = new Clinic();
+    void setUpEmptyFIFOClinic() {
+        clinic = new Clinic(TriageType.FIFO);
     }
 
     @Test
@@ -79,6 +80,20 @@ class ClinicTest {
 
         assertEquals(PATIENT_ALICE, premierPatient);
         assertEquals(PATIENT_BOB, deuxiemePatient);
+    }
+
+    @Test
+    public void etantDonneCliniqueTriantParGravite_quandArrivePatientAvecGraviteDAuMoinsCinq_alorsPatientPlacerEnTeteDeFile() {
+
+        clinic.setTriage(TriageType.GRAVITY);
+        clinic.triagePatient(PATIENT_ALICE, 1, VisibleSymptom.COLD);
+        clinic.triagePatient(PATIENT_BOB, 5, VisibleSymptom.COLD);
+
+        String premierPatient = clinic.obtenirProchainPatientPourMedecin();
+        String deuxiemePatient = clinic.obtenirProchainPatientPourMedecin();
+
+        assertEquals(PATIENT_BOB, premierPatient);
+        assertEquals(PATIENT_ALICE, deuxiemePatient);
     }
 
     private Clinic clinic;
