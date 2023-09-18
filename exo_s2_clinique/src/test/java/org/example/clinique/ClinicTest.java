@@ -17,28 +17,28 @@ class ClinicTest {
     }
 
     @Test
-    public void etantDonneUneCliniqueVide_quandObtenirProchainPatientMedecin_alorsRetourneNull(){
+    public void etantDonneUneCliniqueVide_quandObtenirProchainPatientMedecin_alorsRetourneNull() {
 
         assertNull(clinic.obtenirProchainPatientPourMedecin());
     }
 
     @Test
-    public void etantDonneUneCliniqueVide_quandObtenirProchainPatientRadiologie_alorsRetourneNull(){
+    public void etantDonneUneCliniqueVide_quandObtenirProchainPatientRadiologie_alorsRetourneNull() {
 
         assertNull(clinic.obtenirProchainPatientPourRadiologie());
     }
 
     @Test
-    public void etantDonneCliniqueVide_quandPatientArrive_alorsFileMedecinPlusVide(){
+    public void etantDonneCliniqueVide_quandPatientArrive_alorsFileMedecinPlusVide() {
 
         clinic.triagePatient("Bob", 1, VisibleSymptom.MIGRAINE);
 
         assertFalse(clinic.listeMedecinEstVide());
     }
 
-    
+
     @Test
-    public void etantDonneCliniqueVide_quandPatientArriveAvecBrokenBone_devraitAjouterPatientAFileRadiologie(){
+    public void etantDonneCliniqueVide_quandPatientArriveAvecBrokenBone_devraitAjouterPatientAFileRadiologie() {
 
         clinic.triagePatient("Bob", 5, VisibleSymptom.BROKEN_BONE);
 
@@ -46,7 +46,7 @@ class ClinicTest {
     }
 
     @Test
-    public void etantDonneCliniqueVide_quandPatientArriveAvecSprain_devraitAjouterPatientAFileRadiologie(){
+    public void etantDonneCliniqueVide_quandPatientArriveAvecSprain_devraitAjouterPatientAFileRadiologie() {
 
         clinic.triagePatient("Bob", 5, VisibleSymptom.SPRAIN);
 
@@ -54,7 +54,7 @@ class ClinicTest {
     }
 
     @Test
-    public void etantDonneCliniqueVide_quandPatientArrive_ilEstLePremierDansLaFileMedecin(){
+    public void etantDonneCliniqueVide_quandPatientArrive_ilEstLePremierDansLaFileMedecin() {
 
         clinic.triagePatient("Bob", 1, VisibleSymptom.BROKEN_BONE);
 
@@ -64,16 +64,20 @@ class ClinicTest {
     }
 
     @Test
-    public void etantDonneClinique_quandDeuxPatientsArriventAvecMemesConditions_alorsPatientsRetournerSelonOrdreArrivee(){
+    public void quandArrivePatientsAvecMemesConditions_alorsPatientsRetournerSelonOrdreArrivee() {
 
-        clinic.triagePatient("Jean", 1, VisibleSymptom.COLD);
-        clinic.triagePatient("Julie", 1, VisibleSymptom.COLD);
+        quandArrivePatientsAvecMemesConditions();
 
         String premierPatient = clinic.obtenirProchainPatientPourMedecin();
         String deuxiemePatient = clinic.obtenirProchainPatientPourMedecin();
 
         assertEquals("Jean", premierPatient);
         assertEquals("Julie", deuxiemePatient);
+    }
+
+    private void quandArrivePatientsAvecMemesConditions() {
+        clinic.triagePatient("Jean", 1, VisibleSymptom.COLD);
+        clinic.triagePatient("Julie", 1, VisibleSymptom.COLD);
     }
 
 }

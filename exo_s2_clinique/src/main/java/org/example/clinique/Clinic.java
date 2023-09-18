@@ -3,12 +3,11 @@ package org.example.clinique;
 import org.example.visiblesymptom.type.VisibleSymptom;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Clinic {
 
-    private ArrayList<String> listeMedecin;
-    private ArrayList<String> listeRadiologie;
+    private final ArrayList<String> listeMedecin;
+    private final ArrayList<String> listeRadiologie;
 
     public Clinic(/* ... */) {
         listeMedecin = new ArrayList<>();
@@ -32,11 +31,19 @@ public class Clinic {
     }
 
     public String obtenirProchainPatientPourMedecin() {
-        return listeMedecin.get(0);
+        try {
+            return listeMedecin.remove(0);
+        } catch (IndexOutOfBoundsException error) {
+            return null;
+        }
     }
 
     public String obtenirProchainPatientPourRadiologie() {
-        return listeRadiologie.get(0);
+        try {
+            return listeRadiologie.remove(0);
+        } catch (IndexOutOfBoundsException error) {
+            return null;
+        }
     }
 
     // D'autres méthodes peuvent être nécessaires
