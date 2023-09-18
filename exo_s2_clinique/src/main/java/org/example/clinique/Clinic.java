@@ -7,12 +7,12 @@ import java.util.LinkedList;
 
 public class Clinic {
 
-    private ArrayList<String> listeMedecin;
-    private ArrayList<String> listeRadiologie;
+    private LinkedList<String> listeMedecin;
+    private LinkedList<String> listeRadiologie;
 
     public Clinic(/* ... */) {
-        listeMedecin = new ArrayList<>();
-        listeRadiologie = new ArrayList<>();
+        listeMedecin = new LinkedList<>();
+        listeRadiologie = new LinkedList<>();
     }
 
     public void triagePatient(String name, int gravity, VisibleSymptom visibleSymptom) {
@@ -32,11 +32,19 @@ public class Clinic {
     }
 
     public String obtenirProchainPatientPourMedecin() {
-        return listeMedecin.get(0);
+        if (listeMedecin.isEmpty()) {
+            return null;
+        }
+
+        return listeMedecin.pop();
     }
 
     public String obtenirProchainPatientPourRadiologie() {
-        return listeRadiologie.get(0);
+        if (listeRadiologie.isEmpty()) {
+            return null;
+        }
+
+        return listeRadiologie.pop();
     }
 
     // D'autres méthodes peuvent être nécessaires
