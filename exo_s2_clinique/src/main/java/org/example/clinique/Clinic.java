@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class Clinic {
 
-    private final ArrayList<String> listeMedecin;
-    private final ArrayList<String> listeRadiologie;
+    private final ArrayList<Patient> listeMedecin;
+    private final ArrayList<Patient> listeRadiologie;
     private TriageType triage;
 
     public void setTriage(TriageType triage) {
@@ -24,13 +24,20 @@ public class Clinic {
     public void triagePatient(String name, int gravity, VisibleSymptom visibleSymptom) {
 
         if ((triage == TriageType.GRAVITY) && gravity >= 5) {
-            listeMedecin.add(0, name);
-        } else {
-            listeMedecin.add(name);
-        }
+            var index = obtenirPositionPremierPatientPrioritaireDeLaListeMedecin(5);
+            listeMedecin.add(index, new Patient(name, gravity));
 
-        if (visibleSymptom == VisibleSymptom.BROKEN_BONE || visibleSymptom == VisibleSymptom.SPRAIN) {
-            listeRadiologie.add(name);
+            if (visibleSymptom == VisibleSymptom.BROKEN_BONE || visibleSymptom == VisibleSymptom.SPRAIN) {
+                index = obtenirPositionPremierPatientPrioritaireDeLaListeRadiologie(5);
+                listeRadiologie.add(new Patient(name, gravity));
+            }
+
+        } else {
+            listeMedecin.add(new Patient(name, gravity));
+
+            if (visibleSymptom == VisibleSymptom.BROKEN_BONE || visibleSymptom == VisibleSymptom.SPRAIN) {
+                listeRadiologie.add(new Patient(name, gravity));
+            }
         }
     }
 
@@ -42,7 +49,7 @@ public class Clinic {
         return listeRadiologie.isEmpty();
     }
 
-    public String obtenirProchainPatientPourMedecin() {
+    public Patient obtenirProchainPatientPourMedecin() {
         try {
             return listeMedecin.remove(0);
         } catch (IndexOutOfBoundsException error) {
@@ -50,12 +57,34 @@ public class Clinic {
         }
     }
 
-    public String obtenirProchainPatientPourRadiologie() {
+    public Patient obtenirProchainPatientPourRadiologie() {
         try {
             return listeRadiologie.remove(0);
         } catch (IndexOutOfBoundsException error) {
             return null;
         }
+    }
+
+    private int obtenirPositionPremierPatientPrioritaireDeLaListeMedecin(int gravitePrioritaire) {
+        int index = 0;
+        for (Patient patient : listeMedecin) {
+            if (patient.getGravity() >= gravitePrioritaire) {
+                return index + 1;
+            }
+            index++;
+        }
+        return 0;
+    }
+
+    private int obtenirPositionPremierPatientPrioritaireDeLaListeRadiologie(int gravitePrioritaire) {
+        int index = 0;
+        for (Patient patient : listeRadiologie) {
+            if (patient.getGravity() >= gravitePrioritaire) {
+                return index + 1;
+            }
+            index++;
+        }
+        return 0;
     }
 
     // D'autres méthodes peuvent être nécessaires
